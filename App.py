@@ -29,16 +29,19 @@ def generate_workout():
         duration = data.get("duration", "35 minutes")
 
         prompt = f"""
-        Generate a personalized workout routine for a user with the following details:
+        Generate a personalized workout routine along with a complete diet plan and food recommendations for a user with the following details:
         - Goal: {goal}
         - Level: {level}
         - Equipment: {equipment}
         - Duration: {duration}
 
-        Return a structured workout plan.
+        Return a structured workout plan and complete nutritional strategy.
         """
 
-        system_instruction = "You are Fit Buddy Pro, an elite certified AI fitness trainer. Return concise, highly optimized exercise protocols."
+        system_instruction = (
+            "You are Fit Buddy Pro, an elite certified AI fitness trainer and sports nutritionist. "
+            "Return concise, highly optimized exercise protocols along with precise, actionable diet and meal recommendations."
+        )
 
         response = client.models.generate_content(
             model="gemini-2.5-flash",
@@ -65,9 +68,23 @@ def generate_workout():
                                 "required": ["name", "sets", "reps", "rest"]
                             }
                         },
+                        "nutrition": {
+                            "type": "OBJECT",
+                            "properties": {
+                                "daily_calories": {"type": "STRING"},
+                                "macro_breakdown": {"type": "STRING"},
+                                "pre_workout": {"type": "STRING"},
+                                "post_workout": {"type": "STRING"},
+                                "food_recommendations": {
+                                    "type": "ARRAY",
+                                    "items": {"type": "STRING"}
+                                }
+                            },
+                            "required": ["daily_calories", "macro_breakdown", "pre_workout", "post_workout", "food_recommendations"]
+                        },
                         "safety_disclaimer": {"type": "STRING"}
                     },
-                    "required": ["title", "duration", "exercises", "safety_disclaimer"]
+                    "required": ["title", "duration", "exercises", "nutrition", "safety_disclaimer"]
                 }
             )
         )
