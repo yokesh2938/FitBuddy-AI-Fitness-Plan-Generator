@@ -3,437 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fit Buddy Pro — AI Fitness & Nutrition Companion</title>
+    <title>Fit Buddy Pro — Elite Science & Fitness Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-main: #0b0f19;
-            --card-bg: rgba(22, 30, 46, 0.7);
+            --bg-main: #060911;
+            --card-bg: rgba(18, 26, 43, 0.75);
             --card-border: rgba(255, 255, 255, 0.08);
             --primary: #00f2fe;
             --primary-gradient: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
             --accent-gradient: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
-            --glass-glow: rgba(0, 198, 255, 0.15);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
 
         body {
             background-color: var(--bg-main);
             background-image: 
-                radial-gradient(circle at 15% 15%, rgba(0, 114, 255, 0.12) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, rgba(248, 87, 166, 0.08) 0%, transparent 40%);
+                radial-gradient(circle at 10% 10%, rgba(0, 114, 255, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(248, 87, 166, 0.1) 0%, transparent 45%);
             color: var(--text-main);
             min-height: 100vh;
             padding: 24px 16px;
         }
 
         header {
-            max-width: 1200px;
-            margin: 0 auto 32px auto;
+            max-width: 1400px;
+            margin: 0 auto 28px auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 24px;
+            padding: 16px 28px;
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             backdrop-filter: blur(16px);
             border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
+        .brand { display: flex; align-items: center; gap: 14px; }
         .brand-icon {
-            width: 44px;
-            height: 44px;
+            width: 48px; height: 48px;
             background: var(--primary-gradient);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(0, 198, 255, 0.4);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; color: #fff;
+            box-shadow: 0 4px 18px rgba(0, 198, 255, 0.4);
         }
-
         .brand h1 {
-            font-size: 1.4rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
+            font-size: 1.5rem; font-weight: 800;
             background: linear-gradient(to right, #ffffff, #a5f3fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .streak-badge {
-            background: rgba(255, 88, 88, 0.15);
-            border: 1px solid rgba(255, 88, 88, 0.3);
-            color: #ff5858;
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .metrics-banner {
+            display: flex; gap: 20px; align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            padding: 8px 20px; border-radius: 40px; font-size: 0.88rem;
         }
 
         .dashboard-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1.1fr;
-            gap: 28px;
+            max-width: 1400px; margin: 0 auto;
+            display: grid; grid-template-columns: 1.3fr 1fr; gap: 28px;
         }
 
-        @media (max-width: 992px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        @media (max-width: 1024px) { .dashboard-grid { grid-template-columns: 1fr; } }
 
         .card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             backdrop-filter: blur(16px);
-            border-radius: 24px;
-            padding: 28px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.25);
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 28px;
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            border-radius: 24px; padding: 26px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
             margin-bottom: 24px;
         }
 
-        .card-header i {
-            font-size: 1.2rem;
-            color: var(--primary);
-        }
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .card-header i { font-size: 1.25rem; color: var(--primary); }
+        .card-header h2 { font-size: 1.25rem; font-weight: 700; }
 
-        .card-header h2 {
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
+        .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px; }
+        @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        select, input[type="text"] {
-            width: 100%;
-            background: rgba(11, 15, 25, 0.6);
-            border: 1px solid var(--card-border);
-            color: var(--text-main);
-            padding: 12px 16px;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        select:focus, input[type="text"]:focus {
-            border-color: #00c6ff;
-            box-shadow: 0 0 12px rgba(0, 198, 255, 0.25);
+        select, input[type="text"], input[type="number"], input[type="file"] {
+            width: 100%; background: rgba(11, 15, 25, 0.6);
+            border: 1px solid var(--card-border); color: var(--text-main);
+            padding: 11px 14px; border-radius: 12px; font-size: 0.9rem; outline: none;
         }
 
         .btn-primary {
-            width: 100%;
-            background: var(--primary-gradient);
-            color: #fff;
-            border: none;
-            padding: 14px;
-            border-radius: 14px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            width: 100%; background: var(--primary-gradient); color: #fff;
+            border: none; padding: 13px; border-radius: 12px;
+            font-size: 0.95rem; font-weight: 700; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
             transition: transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 6px 20px rgba(0, 198, 255, 0.3);
         }
+        .btn-primary:hover { transform: translateY(-2px); }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 198, 255, 0.45);
+        /* Macro Dashboard */
+        .macro-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 18px 0; }
+        .macro-box {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border);
+            padding: 14px; border-radius: 14px; text-align: center;
         }
+        .macro-box span { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+        .macro-box p { font-size: 1.15rem; font-weight: 800; color: var(--primary); margin-top: 4px; }
 
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        /* Timeline and Checkbox List */
+        .interactive-item {
+            display: flex; align-items: flex-start; gap: 14px;
+            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border);
+            padding: 14px 18px; border-radius: 14px; margin-bottom: 10px;
         }
+        .interactive-item input[type="checkbox"] { width: 18px; height: 18px; margin-top: 3px; accent-color: #00c6ff; cursor: pointer; }
+        .interactive-item.completed { opacity: 0.5; text-decoration: line-through; }
 
-        #workout-output {
-            margin-top: 28px;
-            border-top: 1px solid var(--card-border);
-            padding-top: 24px;
-        }
-
-        .workout-title-card {
-            background: rgba(0, 198, 255, 0.08);
-            border: 1px solid rgba(0, 198, 255, 0.2);
-            padding: 16px 20px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .workout-title-card h3 {
-            font-size: 1.1rem;
-            color: #fff;
-        }
-
-        .exercise-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 16px 20px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: border-color 0.2s, transform 0.2s;
-        }
-
-        .exercise-card:hover {
-            border-color: rgba(0, 198, 255, 0.4);
-            transform: translateX(4px);
-        }
-
-        .ex-info h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .ex-meta {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            display: flex;
-            gap: 12px;
-        }
-
-        .ex-meta span {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .timer-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--card-border);
-            color: var(--text-main);
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .timer-btn:hover {
-            background: var(--primary-gradient);
-            color: #fff;
-        }
-
-        .timer-widget {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 16px 20px;
-            margin-top: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .timer-display {
-            font-size: 1.8rem;
-            font-weight: 800;
-            font-family: monospace;
-            color: var(--primary);
-        }
-
-        /* Diet Section Styling */
-        .nutrition-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .nutri-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--card-border);
-            border-radius: 14px;
-            padding: 14px;
-        }
-
-        .nutri-box h4 {
-            font-size: 0.85rem;
-            color: var(--primary);
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .nutri-box p {
-            font-size: 0.9rem;
-            color: var(--text-main);
-        }
-
-        .food-list {
-            list-style: none;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .food-tag {
-            background: rgba(0, 198, 255, 0.12);
-            border: 1px solid rgba(0, 198, 255, 0.25);
-            color: #a5f3fc;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.82rem;
-            font-weight: 600;
-        }
-
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 520px;
-        }
-
-        .chat-box {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            padding-right: 8px;
-            margin-bottom: 16px;
-        }
-
-        .msg {
-            max-width: 82%;
-            padding: 12px 18px;
-            border-radius: 18px;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .msg.user {
-            align-self: flex-end;
-            background: var(--primary-gradient);
-            color: #fff;
-            border-bottom-right-radius: 4px;
-        }
-
-        .msg.bot {
-            align-self: flex-start;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--card-border);
-            color: var(--text-main);
-            border-bottom-left-radius: 4px;
-        }
-
-        .prompt-chips {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 12px;
-            margin-bottom: 8px;
-        }
-
-        .chip {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--card-border);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--text-muted);
-        }
-
-        .chip:hover {
-            background: rgba(0, 198, 255, 0.15);
-            border-color: rgba(0, 198, 255, 0.4);
-            color: var(--primary);
-        }
-
-        .chat-input-row {
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-input-row input {
-            flex: 1;
-        }
-
-        .chat-input-row button {
-            width: auto;
-            padding: 0 20px;
-        }
-
-        .disclaimer {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            margin-top: 14px;
-            font-style: italic;
-        }
+        .chat-container { display: flex; flex-direction: column; height: 480px; }
+        .chat-box { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 6px; margin-bottom: 12px; }
+        .msg { max-width: 85%; padding: 12px 18px; border-radius: 16px; font-size: 0.9rem; line-height: 1.5; }
+        .msg.user { align-self: flex-end; background: var(--primary-gradient); color: #fff; }
+        .msg.bot { align-self: flex-start; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border); }
 
         .hidden { display: none !important; }
+        .tag-pill { background: rgba(0, 198, 255, 0.12); border: 1px solid rgba(0, 198, 255, 0.25); color: #a5f3fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; display: inline-block; margin: 2px; }
     </style>
 </head>
 <body>
@@ -443,365 +142,368 @@
             <div class="brand-icon"><i class="fa-solid fa-bolt"></i></div>
             <div>
                 <h1>Fit Buddy Pro</h1>
-                <p style="font-size: 0.8rem; color: var(--text-muted);">AI Fitness & Nutrition Engine</p>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Elite Biomechanics & Clinical Nutrition System</p>
             </div>
         </div>
-        <div class="streak-badge">
-            <i class="fa-solid fa-fire"></i> <span id="streak-count">1</span> Day Streak
+        <div class="metrics-banner">
+            <div><i class="fa-solid fa-heart-pulse" style="color:#ff5858"></i> BMR: <strong id="bmr-val">--</strong> kcal</div>
+            <div><i class="fa-solid fa-fire" style="color:#00c6ff"></i> TDEE: <strong id="tdee-val">--</strong> kcal</div>
+            <button onclick="window.print()" class="btn-primary" style="padding: 6px 14px; font-size: 0.8rem; width: auto;"><i class="fa-solid fa-file-pdf"></i> Export Plan</button>
         </div>
     </header>
 
     <main class="dashboard-grid">
         
-        <!-- LEFT COLUMN: ROUTINE & DIET GENERATOR -->
+        <!-- LEFT COLUMN: GENERATOR & DATA DISPLAY -->
         <div>
+            <!-- BIOMETRIC CONFIGURATOR -->
             <section class="card">
                 <div class="card-header">
-                    <i class="fa-solid fa-dumbbell"></i>
-                    <h2>Routine & Nutrition Builder</h2>
+                    <i class="fa-solid fa-user-gear"></i>
+                    <h2>Biometric Configurator & Engine Setup</h2>
                 </div>
 
-                <form id="workout-form">
+                <form id="master-form">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Target Goal</label>
-                            <select id="goal">
-                                <option value="Hypertrophy & Muscle Building">Muscle Building</option>
-                                <option value="Fat Loss & Calorie Burn">Fat Loss</option>
-                                <option value="Functional Endurance">Endurance</option>
-                                <option value="Core & Mobility">Core & Mobility</option>
-                            </select>
+                            <label>Weight (kg)</label>
+                            <input type="number" id="weight" value="70" required>
                         </div>
-
                         <div class="form-group">
-                            <label>Experience</label>
-                            <select id="level">
-                                <option value="Beginner">Beginner</option>
-                                <option value="Intermediate" selected>Intermediate</option>
-                                <option value="Advanced">Advanced</option>
+                            <label>Height (cm)</label>
+                            <input type="number" id="height" value="175" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Age</label>
+                            <input type="number" id="age" value="25" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select id="gender">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
                             </select>
                         </div>
-
+                        <div class="form-group">
+                            <label>Activity Multiplier</label>
+                            <select id="activity">
+                                <option value="sedentary">Sedentary (Desk job)</option>
+                                <option value="lightly_active">Light (1-3 days/wk)</option>
+                                <option value="moderately_active" selected>Moderate (3-5 days/wk)</option>
+                                <option value="very_active">Heavy (6-7 days/wk)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Training Goal</label>
+                            <select id="goal">
+                                <option value="Muscle Hypertrophy">Muscle Hypertrophy</option>
+                                <option value="Fat Loss & Deficit">Fat Loss & Deficit</option>
+                                <option value="Functional Strength">Functional Strength</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Diet Style</label>
+                            <select id="dietary_style">
+                                <option value="High Protein Balanced">High Protein Balanced</option>
+                                <option value="Vegetarian High Protein">Vegetarian High Protein</option>
+                                <option value="Vegan Athletic">Vegan Athletic</option>
+                                <option value="Keto/Low Carb">Keto/Low Carb</option>
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label>Equipment</label>
                             <select id="equipment">
+                                <option value="Full Gym">Full Gym Equipment</option>
                                 <option value="Dumbbells Only">Dumbbells Only</option>
-                                <option value="Bodyweight Only">Bodyweight Only</option>
-                                <option value="Full Commercial Gym">Full Gym</option>
-                                <option value="Resistance Bands">Resistance Bands</option>
+                                <option value="Bodyweight Calisthenics">Bodyweight Only</option>
                             </select>
                         </div>
-
                         <div class="form-group">
-                            <label>Duration</label>
-                            <select id="duration">
-                                <option value="20 minutes">20 Minutes</option>
-                                <option value="35 minutes" selected>35 Minutes</option>
-                                <option value="50 minutes">50 Minutes</option>
-                            </select>
+                            <label>Restrictions / Allergies</label>
+                            <input type="text" id="allergies" placeholder="e.g. Dairy, Peanuts, Gluten">
                         </div>
                     </div>
 
-                    <button type="submit" id="generate-btn" class="btn-primary">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Plan & Diet
+                    <button type="submit" id="gen-btn" class="btn-primary">
+                        <i class="fa-solid fa-atom"></i> Generate Master Workout & Diet Blueprint
                     </button>
                 </form>
-
-                <div id="workout-output" class="hidden">
-                    <div class="workout-title-card">
-                        <div>
-                            <h3 id="workout-title"></h3>
-                            <p id="workout-duration-text" style="font-size:0.8rem; color: var(--text-muted);"></p>
-                        </div>
-                        <button class="btn-primary" onclick="markWorkoutComplete()" style="width:auto; padding: 8px 16px; font-size: 0.85rem;">
-                            <i class="fa-solid fa-check"></i> Complete
-                        </button>
-                    </div>
-
-                    <div id="exercise-list"></div>
-
-                    <div id="timer-widget" class="timer-widget hidden">
-                        <div>
-                            <p style="font-size:0.8rem; color:var(--text-muted);">Rest Timer</p>
-                            <div id="timer-display" class="timer-display">00:45</div>
-                        </div>
-                        <div style="display:flex; gap:8px;">
-                            <button class="timer-btn" onclick="toggleTimer()"><i id="timer-icon" class="fa-solid fa-play"></i></button>
-                            <button class="timer-btn" onclick="resetTimer()"><i class="fa-solid fa-rotate-right"></i></button>
-                        </div>
-                    </div>
-                </div>
             </section>
 
-            <!-- NUTRITION CARD -->
-            <section id="nutrition-card" class="card hidden">
+            <!-- WORKOUT BLUEPRINT -->
+            <section id="workout-section" class="card hidden">
+                <div class="card-header">
+                    <i class="fa-solid fa-dumbbell"></i>
+                    <h2 id="plan-title-display">Exercise Protocol</h2>
+                </div>
+                <div id="workout-list"></div>
+            </section>
+
+            <!-- DIET & SUPPLEMENT BLUEPRINT -->
+            <section id="nutrition-section" class="card hidden">
                 <div class="card-header">
                     <i class="fa-solid fa-utensils"></i>
-                    <h2>Diet Strategy & Food Plan</h2>
+                    <h2>Precision Diet & Macro Blueprint</h2>
                 </div>
 
-                <div class="nutrition-grid">
-                    <div class="nutri-box">
-                        <h4>Daily Target</h4>
-                        <p id="nutri-calories">-</p>
-                    </div>
-                    <div class="nutri-box">
-                        <h4>Macro Ratio</h4>
-                        <p id="nutri-macros">-</p>
-                    </div>
-                    <div class="nutri-box">
-                        <h4>Pre-Workout Fuel</h4>
-                        <p id="nutri-pre">-</p>
-                    </div>
-                    <div class="nutri-box">
-                        <h4>Post-Workout Recovery</h4>
-                        <p id="nutri-post">-</p>
-                    </div>
+                <div class="macro-row">
+                    <div class="macro-box"><span>Calories</span><p id="target-cal">--</p></div>
+                    <div class="macro-box"><span>Protein</span><p id="target-p">--</p></div>
+                    <div class="macro-box"><span>Carbs</span><p id="target-c">--</p></div>
+                    <div class="macro-box"><span>Fats</span><p id="target-f">--</p></div>
                 </div>
 
-                <div class="nutri-box" style="margin-top: 12px;">
-                    <h4>Recommended Foods</h4>
-                    <div id="food-tags" class="food-list"></div>
-                </div>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:14px;"><i class="fa-solid fa-droplet" style="color:#00c6ff"></i> Water Goal: <strong id="water-goal" style="color:#fff">--</strong></p>
 
-                <p id="safety-disclaimer" class="disclaimer"></p>
+                <h3 style="font-size:1rem; margin-bottom:10px;">Meal Schedule</h3>
+                <div id="meal-list"></div>
+
+                <h3 style="font-size:1rem; margin:16px 0 10px 0;">Supplements & Recovery</h3>
+                <div id="supplements-list"></div>
+                <p id="recovery-box" style="font-size:0.88rem; color:var(--text-muted); margin-top:10px; line-height:1.5;"></p>
             </section>
         </div>
 
-        <!-- RIGHT COLUMN: AI CHAT ASSISTANT -->
-        <section class="card chat-container">
-            <div class="card-header">
-                <i class="fa-solid fa-comments"></i>
-                <h2>Fit Buddy Assistant</h2>
-            </div>
-
-            <div id="chat-box" class="chat-box">
-                <div class="msg bot">
-                    Hello! I am your AI Coach. Ask me anything about diet, exercise execution, or post-workout recovery.
+        <!-- RIGHT COLUMN: MULTIMODAL VISION & CHAT -->
+        <div>
+            <!-- VISION AI ANALYZER -->
+            <section class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-eye"></i>
+                    <h2>Multimodal Vision Analyzer</h2>
                 </div>
-            </div>
 
-            <div class="prompt-chips">
-                <div class="chip" onclick="quickPrompt('Give me a 5-minute pre-workout warm-up routine.')">⚡ 5-min Warmup</div>
-                <div class="chip" onclick="quickPrompt('High protein vegetarian snack ideas?')">🥗 High Protein Snacks</div>
-                <div class="chip" onclick="quickPrompt('How to prevent lower back pain during squats?')">🛡️ Squat Form Tips</div>
-            </div>
+                <form id="vision-form">
+                    <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+                        <div class="form-group">
+                            <label>Scan Type</label>
+                            <select id="vision-mode">
+                                <option value="food_scan">Meal / Macro Scanner</option>
+                                <option value="form_check">Biomechanics / Form Check</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Upload Image</label>
+                            <input type="file" id="vision-file" accept="image/*" required>
+                        </div>
+                    </div>
+                    <button type="submit" id="vision-btn" class="btn-primary">
+                        <i class="fa-solid fa-camera"></i> Execute Vision Scan
+                    </button>
+                </form>
 
-            <div class="chat-input-row">
-                <input type="text" id="chat-input" placeholder="Ask about workouts, form, or nutrition...">
-                <button id="send-btn" class="btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
-            </div>
-        </section>
+                <div id="vision-output" class="hidden" style="margin-top:16px; padding:14px; background:rgba(0,198,255,0.06); border-radius:14px; font-size:0.88rem; line-height:1.5;"></div>
+            </section>
+
+            <!-- CHAT ASSISTANT -->
+            <section class="card chat-container">
+                <div class="card-header">
+                    <i class="fa-solid fa-comments"></i>
+                    <h2>Fit Buddy Pro AI Assistant</h2>
+                </div>
+
+                <div id="chat-box" class="chat-box">
+                    <div class="msg bot">Welcome! Ask any sports science or nutrition questions here.</div>
+                </div>
+
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="chat-input" placeholder="Ask about exercises, macros, or recovery...">
+                    <button id="send-btn" class="btn-primary" style="width:auto; padding:0 20px;"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </section>
+        </div>
 
     </main>
 
     <script>
         const chatHistory = [];
-        let timerInterval = null;
-        let secondsLeft = 45;
-        let isTimerRunning = false;
 
-        document.getElementById('workout-form').addEventListener('submit', async (e) => {
+        // LOAD PERSISTED USER PROFILE ON INIT
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('/api/profile');
+                const data = await res.json();
+                if (data.success && data.profile) {
+                    const p = data.profile;
+                    document.getElementById('weight').value = p.weight_kg;
+                    document.getElementById('height').value = p.height_cm;
+                    document.getElementById('age').value = p.age;
+                    document.getElementById('gender').value = p.gender;
+                    document.getElementById('activity').value = p.activity_level;
+                    document.getElementById('bmr-val').innerText = p.bmr;
+                    document.getElementById('tdee-val').innerText = p.tdee;
+                }
+            } catch (e) {}
+        });
+
+        // MASTER PLAN GENERATION
+        document.getElementById('master-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('generate-btn');
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Engine Crafting Plan...`;
+            const btn = document.getElementById('gen-btn');
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Calculating BMR/TDEE & Synthesizing Plan...`;
             btn.disabled = true;
 
             const payload = {
+                weight: document.getElementById('weight').value,
+                height: document.getElementById('height').value,
+                age: document.getElementById('age').value,
+                gender: document.getElementById('gender').value,
+                activity: document.getElementById('activity').value,
                 goal: document.getElementById('goal').value,
-                level: document.getElementById('level').value,
+                dietary_style: document.getElementById('dietary_style').value,
                 equipment: document.getElementById('equipment').value,
-                duration: document.getElementById('duration').value
+                allergies: document.getElementById('allergies').value || 'None'
             };
 
             try {
-                const res = await fetch('/api/workout', {
+                // Save Profile First
+                await fetch('/api/profile', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
+
+                // Generate Plan
+                const res = await fetch('/api/generate-master-plan', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
                 const result = await res.json();
                 if (result.success) {
-                    renderWorkout(result.data);
-                    renderNutrition(result.data.nutrition, result.data.safety_disclaimer);
+                    document.getElementById('bmr-val').innerText = result.bmr;
+                    document.getElementById('tdee-val').innerText = result.tdee;
+                    renderMasterPlan(result.data);
                 } else {
-                    alert('Error generating routine: ' + result.error);
+                    alert('Error: ' + result.error);
                 }
             } catch (err) {
-                alert('Network connection error.');
+                alert('Server connection error.');
             } finally {
-                btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Generate Plan & Diet`;
+                btn.innerHTML = `<i class="fa-solid fa-atom"></i> Generate Master Workout & Diet Blueprint`;
                 btn.disabled = false;
             }
         });
 
-        function renderWorkout(data) {
-            document.getElementById('workout-title').innerText = data.title;
-            document.getElementById('workout-duration-text').innerText = `Est. Duration: ${data.duration || 'Custom'}`;
+        function renderMasterPlan(d) {
+            document.getElementById('plan-title-display').innerText = d.plan_title;
             
-            const listEl = document.getElementById('exercise-list');
-            listEl.innerHTML = '';
-
-            data.exercises.forEach(ex => {
-                const card = document.createElement('div');
-                card.className = 'exercise-card';
-                card.innerHTML = `
-                    <div class="ex-info">
-                        <h4>${ex.name}</h4>
-                        <div class="ex-meta">
-                            <span>${ex.sets} Sets</span> • 
-                            <span>${ex.reps} Reps</span> • 
-                            <span>${ex.rest} Rest</span>
+            // Workout List
+            const wList = document.getElementById('workout-list');
+            wList.innerHTML = '';
+            d.workout_protocol.forEach((ex, idx) => {
+                wList.innerHTML += `
+                    <div class="interactive-item" id="ex-item-${idx}">
+                        <input type="checkbox" onchange="toggleCheck('ex-item-${idx}')">
+                        <div>
+                            <strong style="font-size:0.95rem;">${ex.exercise_name}</strong>
+                            <p style="font-size:0.82rem; color:var(--text-muted); margin-top:2px;">
+                                ${ex.target_sets} Sets • ${ex.target_reps} Reps • ${ex.rest_period} Rest
+                            </p>
+                            <p style="font-size:0.8rem; color:var(--primary); margin-top:4px;">💡 ${ex.coaching_cue}</p>
                         </div>
-                    </div>
-                    <button class="timer-btn" title="Start Rest Timer" onclick="startRestTimer('${ex.rest}')">
-                        <i class="fa-solid fa-stopwatch"></i>
-                    </button>
-                `;
-                listEl.appendChild(card);
+                    </div>`;
+            });
+            document.getElementById('workout-section').classList.remove('hidden');
+
+            // Nutrition
+            document.getElementById('target-cal').innerText = d.target_daily_calories;
+            document.getElementById('target-p').innerText = d.macro_targets.protein_grams;
+            document.getElementById('target-c').innerText = d.macro_targets.carbs_grams;
+            document.getElementById('target-f').innerText = d.macro_targets.fats_grams;
+            document.getElementById('water-goal').innerText = d.water_intake_liters;
+
+            const mList = document.getElementById('meal-list');
+            mList.innerHTML = '';
+            for (const [key, val] of Object.entries(d.diet_protocol)) {
+                mList.innerHTML += `
+                    <div class="interactive-item" id="meal-item-${key}">
+                        <input type="checkbox" onchange="toggleCheck('meal-item-${key}')">
+                        <div>
+                            <strong style="font-size:0.85rem; color:var(--primary); text-transform:uppercase;">${key.replace('_', ' ')}</strong>
+                            <p style="font-size:0.9rem; margin-top:2px;">${val}</p>
+                        </div>
+                    </div>`;
+            }
+
+            const suppList = document.getElementById('supplements-list');
+            suppList.innerHTML = '';
+            d.supplement_suggestions.forEach(supp => {
+                suppList.innerHTML += `<span class="tag-pill">${supp}</span>`;
             });
 
-            document.getElementById('workout-output').classList.remove('hidden');
+            document.getElementById('recovery-box').innerText = "Recovery Strategy: " + d.recovery_advice;
+            document.getElementById('nutrition-section').classList.remove('hidden');
         }
 
-        function renderNutrition(nutrition, disclaimer) {
-            if (!nutrition) return;
-
-            document.getElementById('nutri-calories').innerText = nutrition.daily_calories || 'N/A';
-            document.getElementById('nutri-macros').innerText = nutrition.macro_breakdown || 'N/A';
-            document.getElementById('nutri-pre').innerText = nutrition.pre_workout || 'N/A';
-            document.getElementById('nutri-post').innerText = nutrition.post_workout || 'N/A';
-
-            const foodContainer = document.getElementById('food-tags');
-            foodContainer.innerHTML = '';
-
-            if (nutrition.food_recommendations) {
-                nutrition.food_recommendations.forEach(item => {
-                    const tag = document.createElement('span');
-                    tag.className = 'food-tag';
-                    tag.innerText = item;
-                    foodContainer.appendChild(tag);
-                });
-            }
-
-            document.getElementById('safety-disclaimer').innerText = disclaimer || '';
-            document.getElementById('nutrition-card').classList.remove('hidden');
+        function toggleCheck(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('completed');
         }
 
-        function startRestTimer(restString) {
-            let seconds = 45;
-            const match = restString.match(/(\d+)/);
-            if (match) seconds = parseInt(match[0]);
+        // MULTIMODAL VISION SCAN
+        document.getElementById('vision-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('vision-btn');
+            const fileInput = document.getElementById('vision-file');
+            if(!fileInput.files[0]) return;
 
-            secondsLeft = seconds;
-            updateTimerDisplay();
-            document.getElementById('timer-widget').classList.remove('hidden');
-            
-            clearInterval(timerInterval);
-            isTimerRunning = true;
-            document.getElementById('timer-icon').className = 'fa-solid fa-pause';
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Processing Vision Model...`;
+            btn.disabled = true;
 
-            timerInterval = setInterval(() => {
-                secondsLeft--;
-                updateTimerDisplay();
-                if (secondsLeft <= 0) {
-                    clearInterval(timerInterval);
-                    isTimerRunning = false;
-                    document.getElementById('timer-icon').className = 'fa-solid fa-play';
-                    alert('Rest timer finished! Ready for your next set.');
+            const formData = new FormData();
+            formData.append('image', fileInput.files[0]);
+            formData.append('mode', document.getElementById('vision-mode').value);
+
+            try {
+                const res = await fetch('/api/analyze-multimodal', { method: 'POST', body: formData });
+                const result = await res.json();
+                if(result.success) {
+                    const out = document.getElementById('vision-output');
+                    out.innerText = result.analysis;
+                    out.classList.remove('hidden');
                 }
-            }, 1000);
-        }
-
-        function toggleTimer() {
-            if (isTimerRunning) {
-                clearInterval(timerInterval);
-                isTimerRunning = false;
-                document.getElementById('timer-icon').className = 'fa-solid fa-play';
-            } else {
-                isTimerRunning = true;
-                document.getElementById('timer-icon').className = 'fa-solid fa-pause';
-                timerInterval = setInterval(() => {
-                    secondsLeft--;
-                    updateTimerDisplay();
-                    if (secondsLeft <= 0) {
-                        clearInterval(timerInterval);
-                        isTimerRunning = false;
-                        document.getElementById('timer-icon').className = 'fa-solid fa-play';
-                    }
-                }, 1000);
+            } catch(err) { alert('Image scan failed.'); }
+            finally {
+                btn.innerHTML = `<i class="fa-solid fa-camera"></i> Execute Vision Scan`;
+                btn.disabled = false;
             }
-        }
-
-        function resetTimer() {
-            clearInterval(timerInterval);
-            secondsLeft = 45;
-            isTimerRunning = false;
-            document.getElementById('timer-icon').className = 'fa-solid fa-play';
-            updateTimerDisplay();
-        }
-
-        function updateTimerDisplay() {
-            const mins = Math.floor(secondsLeft / 60).toString().padStart(2, '0');
-            const secs = (secondsLeft % 60).toString().padStart(2, '0');
-            document.getElementById('timer-display').innerText = `${mins}:${secs}`;
-        }
-
-        function markWorkoutComplete() {
-            let current = parseInt(localStorage.getItem('fit_streak') || '1');
-            current += 1;
-            localStorage.setItem('fit_streak', current);
-            document.getElementById('streak-count').innerText = current;
-            alert('Workout completed! Streak updated.');
-        }
-
-        document.getElementById('send-btn').addEventListener('click', () => sendChatMessage());
-        document.getElementById('chat-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendChatMessage();
         });
 
-        function quickPrompt(text) {
-            document.getElementById('chat-input').value = text;
-            sendChatMessage();
-        }
+        // CHAT ASSISTANT
+        document.getElementById('send-btn').addEventListener('click', sendChat);
+        async function sendChat() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if(!msg) return;
 
-        async function sendChatMessage() {
-            const inputEl = document.getElementById('chat-input');
-            const message = inputEl.value.trim();
-            if (!message) return;
-
-            appendMsg('user', message);
-            inputEl.value = '';
+            appendMsg('user', msg);
+            input.value = '';
 
             try {
                 const res = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message, history: chatHistory })
+                    body: JSON.stringify({ message: msg, history: chatHistory })
                 });
                 const result = await res.json();
-                if (result.success) {
+                if(result.success) {
                     appendMsg('bot', result.reply);
-                    chatHistory.push({ sender: 'user', text: message });
+                    chatHistory.push({ sender: 'user', text: msg });
                     chatHistory.push({ sender: 'bot', text: result.reply });
-                } else {
-                    appendMsg('bot', 'Sorry, I encountered an issue processing that.');
                 }
-            } catch (err) {
-                appendMsg('bot', 'Network error. Please try again.');
-            }
+            } catch(err) {}
         }
 
         function appendMsg(sender, text) {
             const box = document.getElementById('chat-box');
-            const msg = document.createElement('div');
-            msg.className = `msg ${sender}`;
-            msg.innerText = text;
-            box.appendChild(msg);
+            const el = document.createElement('div');
+            el.className = `msg ${sender}`;
+            el.innerText = text;
+            box.appendChild(el);
             box.scrollTop = box.scrollHeight;
         }
-
-        document.getElementById('streak-count').innerText = localStorage.getItem('fit_streak') || '1';
     </script>
 </body>
 </html>
