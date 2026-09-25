@@ -11,11 +11,12 @@ load_dotenv()
 app = Flask(__name__)
 DATABASE = 'database.db'
 
+# Validate Gemini API Key
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
-    raise ValueError("GEMINI_API_KEY environment variable is missing in .env file.")
+    print("\n⚠️ WARNING: GEMINI_API_KEY environment variable is missing in your .env file!\n")
 
-client = genai.Client(api_key=GEMINI_API_KEY)
+client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
 
 # --- DATABASE SETUP ---
 def get_db():
@@ -58,7 +59,7 @@ def init_db():
 
 init_db()
 
-# --- BMR / TDEE MATH ENGINE ---
+# --- BMR & TDEE CALCULATION ENGINE ---
 def calculate_metrics(weight, height, age, gender, activity):
     if gender.lower() == 'female':
         bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161
@@ -81,74 +82,77 @@ def index():
 
 @app.route("/api/profile", methods=["GET", "POST"])
 def user_profile():
-    db = get_db()
-    cursor = db.cursor()
-    if request.method == "POST":
-        data = request.json or {}
-        weight = float(data.get("weight", 70))
-        height = float(data.get("height", 175))
-        age = int(data.get("age", 25))
-        gender = data.get("gender", "male")
-        activity = data.get("activity", "moderately_active")
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        if request.method == "POST":
+            data = request.json or {}
+            weight = float(data.get("weight", 70))
+            height = float(data.get("height", 175))
+            age = int(data.get("age", 25))
+            gender = data.get("gender", "male")
+            activity = data.get("activity", "moderately_active")
 
-        bmr, tdee = calculate_metrics(weight, height, age, gender, activity)
+            bmr, tdee = calculate_metrics(weight, height, age, gender, activity)
 
-        cursor.execute('''
-            INSERT INTO user_profile (id, weight_kg, height_cm, age, gender, activity_level, bmr, tdee)
-            VALUES (1, ?, ?, ?, ?, ?, ?, ?)
-            ON CONFLICT(id) DO UPDATE SET
-                weight_kg=excluded.weight_kg,
-                height_cm=excluded.height_cm,
-                age=excluded.age,
-                gender=excluded.gender,
-                activity_level=excluded.activity_level,
-                bmr=excluded.bmr,
-                tdee=excluded.tdee
-        ''', (weight, height, age, gender, activity, bmr, tdee))
-        db.commit()
+            cursor.execute('''
+                INSERT INTO user_profile (id, weight_kg, height_cm, age, gender, activity_level, bmr, tdee)
+                VALUES (1, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(id) DO UPDATE SET
+                    weight_kg=excluded.weight_kg,
+                    height_cm=excluded.height_cm,
+                    age=excluded.age,
+                    gender=excluded.gender,
+                    activity_level=excluded.activity_level,
+                    bmr=excluded.bmr,
+                    tdee=excluded.tdee
+            ''', (weight, height, age, gender, activity, bmr, tdee))
+            db.commit()
 
-        return jsonify({"success": True, "bmr": bmr, "tdee": tdee})
-    else:
-        cursor.execute('SELECT * FROM user_profile WHERE id = 1')
-        row = cursor.fetchone()
-        if row:
-            return jsonify({"success": True, "profile": dict(row)})
-        return jsonify({"success": False, "message": "No profile saved yet"})
+            return jsonify({"success": True, "bmr": bmr, "tdee": tdee})
+        else:
+            cursor.execute('SELECT * FROM user_profile WHERE id = 1')
+            row = cursor.fetchone()
+            if row:
+                return jsonify({"success": True, "profile": dict(row)})
+            return jsonify({"success": False, "message": "No profile saved yet"})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route("/api/generate-master-plan", methods=["POST"])
 def generate_master_plan():
+    if not client:
+        return jsonify({"success": False, "error": "GEMINI_API_KEY is missing in your .env file."}), 400
     try:
         data = request.json or {}
-        goal = data.get("goal", "Muscle Hypertrophy")
-        level = data.get("level", "Intermediate")
-        equipment = data.get("equipment", "Full Gym")
-        dietary_style = data.get("dietary_style", "High Protein Balanced")
-        allergies = data.get("allergies", "None")
         weight = data.get("weight", 70)
         height = data.get("height", 175)
         age = data.get("age", 25)
         gender = data.get("gender", "male")
         activity = data.get("activity", "moderately_active")
+        goal = data.get("goal", "Muscle Hypertrophy")
+        dietary_style = data.get("dietary_style", "High Protein Balanced")
+        equipment = data.get("equipment", "Full Gym")
+        allergies = data.get("allergies", "None")
 
         bmr, tdee = calculate_metrics(float(weight), float(height), int(age), gender, activity)
 
         prompt = f"""
-        Design an elite multi-tier training and clinical-grade nutrition roadmap for a client with the following metrics:
+        Design an elite training and nutrition roadmap for a client with the following metrics:
         - Biometrics: {weight} kg, {height} cm, {age} y/o, {gender}
         - Computed Basal Metabolic Rate (BMR): {bmr} kcal/day
         - Total Daily Energy Expenditure (TDEE): {tdee} kcal/day
         - Target Goal: {goal}
-        - Experience Level: {level}
         - Equipment Available: {equipment}
         - Nutrition Style: {dietary_style}
         - Dietary Restrictions / Allergies: {allergies}
 
-        Return a complete JSON dataset containing precise exercise routines, target macronutrient grams, complete daily meal schedules, and hydration protocols.
+        Return a JSON dataset containing structured exercise routines, target macronutrient grams, complete daily meal schedules, and hydration protocols.
         """
 
         system_instruction = (
-            "You are Fit Buddy Pro Master Engine, an expert sports scientist, clinical dietitian, and kinesiology researcher. "
-            "Deliver strict, granular JSON output formatted to absolute professional standard."
+            "You are Fit Buddy Pro Master Engine, an expert sports scientist and clinical dietitian. "
+            "Deliver strict JSON output formatted to absolute professional standards."
         )
 
         response = client.models.generate_content(
@@ -190,7 +194,6 @@ def generate_master_plan():
                             "type": "OBJECT",
                             "properties": {
                                 "breakfast": {"type": "STRING"},
-                                "morning_snack": {"type": "STRING"},
                                 "lunch": {"type": "STRING"},
                                 "pre_workout": {"type": "STRING"},
                                 "post_workout": {"type": "STRING"},
@@ -219,13 +222,16 @@ def generate_master_plan():
         return jsonify({"success": True, "bmr": bmr, "tdee": tdee, "data": structured_data})
 
     except Exception as e:
+        print(f"Error in generate_master_plan: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route("/api/analyze-multimodal", methods=["POST"])
 def analyze_multimodal():
+    if not client:
+        return jsonify({"success": False, "error": "GEMINI_API_KEY missing in .env file."}), 400
     try:
         if 'image' not in request.files:
-            return jsonify({"success": False, "error": "No image uploaded"}), 400
+            return jsonify({"success": False, "error": "No image uploaded."}), 400
 
         file = request.files['image']
         analysis_mode = request.form.get("mode", "food_scan")
@@ -258,41 +264,32 @@ def analyze_multimodal():
         return jsonify({"success": True, "analysis": response.text})
 
     except Exception as e:
+        print(f"Vision error: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route("/api/chat", methods=["POST"])
 def chat():
+    if not client:
+        return jsonify({"success": False, "error": "API key missing. Check your .env file."}), 400
     try:
         data = request.json or {}
         user_message = data.get("message", "")
-        history = data.get("history", [])
 
         if not user_message:
-            return jsonify({"success": False, "error": "Message required"}), 400
-
-        contents = []
-        for msg in history:
-            role = "user" if msg.get("sender") == "user" else "model"
-            contents.append(types.Content(role=role, parts=[types.Part.from_text(text=msg.get("text", ""))]))
-
-        contents.append(types.Content(role="user", parts=[types.Part.from_text(text=user_message)]))
-
-        system_instruction = (
-            "You are Fit Buddy Pro AI Assistant, a top-tier exercise scientist and sports dietitian. "
-            "Provide direct, science-backed answers. Recommend physician consultation for severe pain."
-        )
+            return jsonify({"success": False, "error": "Message required."}), 400
 
         response = client.models.generate_content(
             model="gemini-2.5-flash",
-            contents=contents,
+            contents=user_message,
             config=types.GenerateContentConfig(
-                system_instruction=system_instruction
+                system_instruction="You are Fit Buddy Pro AI Assistant, an empathetic sports nutritionist and fitness coach. Provide clear, direct, actionable answers."
             )
         )
 
         return jsonify({"success": True, "reply": response.text})
 
     except Exception as e:
+        print(f"Chat error: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
 
 if __name__ == "__main__":
