@@ -114,6 +114,7 @@
             box-shadow: 0 12px 40px rgba(0,0,0,0.25);
             position: relative;
             overflow: hidden;
+            margin-bottom: 28px;
         }
 
         .card-header {
@@ -294,6 +295,52 @@
             color: var(--primary);
         }
 
+        /* Diet Section Styling */
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .nutri-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .nutri-box h4 {
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nutri-box p {
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        .food-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .food-tag {
+            background: rgba(0, 198, 255, 0.12);
+            border: 1px solid rgba(0, 198, 255, 0.25);
+            color: #a5f3fc;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
         .chat-container {
             display: flex;
             flex-direction: column;
@@ -406,88 +453,122 @@
 
     <main class="dashboard-grid">
         
-        <!-- WORKOUT GENERATOR -->
-        <section class="card">
-            <div class="card-header">
-                <i class="fa-solid fa-dumbbell"></i>
-                <h2>Routine Builder</h2>
-            </div>
-
-            <form id="workout-form">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Target Goal</label>
-                        <select id="goal">
-                            <option value="Hypertrophy & Muscle Building">Muscle Building</option>
-                            <option value="Fat Loss & Calorie Burn">Fat Loss</option>
-                            <option value="Functional Endurance">Endurance</option>
-                            <option value="Core & Mobility">Core & Mobility</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Experience</label>
-                        <select id="level">
-                            <option value="Beginner">Beginner</option>
-                            <option value="Intermediate" selected>Intermediate</option>
-                            <option value="Advanced">Advanced</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Equipment</label>
-                        <select id="equipment">
-                            <option value="Dumbbells Only">Dumbbells Only</option>
-                            <option value="Bodyweight Only">Bodyweight Only</option>
-                            <option value="Full Commercial Gym">Full Gym</option>
-                            <option value="Resistance Bands">Resistance Bands</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Duration</label>
-                        <select id="duration">
-                            <option value="20 minutes">20 Minutes</option>
-                            <option value="35 minutes" selected>35 Minutes</option>
-                            <option value="50 minutes">50 Minutes</option>
-                        </select>
-                    </div>
+        <!-- LEFT COLUMN: ROUTINE & DIET GENERATOR -->
+        <div>
+            <section class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-dumbbell"></i>
+                    <h2>Routine & Nutrition Builder</h2>
                 </div>
 
-                <button type="submit" id="generate-btn" class="btn-primary">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Custom Plan
-                </button>
-            </form>
+                <form id="workout-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Target Goal</label>
+                            <select id="goal">
+                                <option value="Hypertrophy & Muscle Building">Muscle Building</option>
+                                <option value="Fat Loss & Calorie Burn">Fat Loss</option>
+                                <option value="Functional Endurance">Endurance</option>
+                                <option value="Core & Mobility">Core & Mobility</option>
+                            </select>
+                        </div>
 
-            <div id="workout-output" class="hidden">
-                <div class="workout-title-card">
-                    <div>
-                        <h3 id="workout-title"></h3>
-                        <p id="workout-duration-text" style="font-size:0.8rem; color: var(--text-muted);"></p>
+                        <div class="form-group">
+                            <label>Experience</label>
+                            <select id="level">
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate" selected>Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Equipment</label>
+                            <select id="equipment">
+                                <option value="Dumbbells Only">Dumbbells Only</option>
+                                <option value="Bodyweight Only">Bodyweight Only</option>
+                                <option value="Full Commercial Gym">Full Gym</option>
+                                <option value="Resistance Bands">Resistance Bands</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Duration</label>
+                            <select id="duration">
+                                <option value="20 minutes">20 Minutes</option>
+                                <option value="35 minutes" selected>35 Minutes</option>
+                                <option value="50 minutes">50 Minutes</option>
+                            </select>
+                        </div>
                     </div>
-                    <button class="btn-primary" onclick="markWorkoutComplete()" style="width:auto; padding: 8px 16px; font-size: 0.85rem;">
-                        <i class="fa-solid fa-check"></i> Complete
+
+                    <button type="submit" id="generate-btn" class="btn-primary">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Plan & Diet
                     </button>
+                </form>
+
+                <div id="workout-output" class="hidden">
+                    <div class="workout-title-card">
+                        <div>
+                            <h3 id="workout-title"></h3>
+                            <p id="workout-duration-text" style="font-size:0.8rem; color: var(--text-muted);"></p>
+                        </div>
+                        <button class="btn-primary" onclick="markWorkoutComplete()" style="width:auto; padding: 8px 16px; font-size: 0.85rem;">
+                            <i class="fa-solid fa-check"></i> Complete
+                        </button>
+                    </div>
+
+                    <div id="exercise-list"></div>
+
+                    <div id="timer-widget" class="timer-widget hidden">
+                        <div>
+                            <p style="font-size:0.8rem; color:var(--text-muted);">Rest Timer</p>
+                            <div id="timer-display" class="timer-display">00:45</div>
+                        </div>
+                        <div style="display:flex; gap:8px;">
+                            <button class="timer-btn" onclick="toggleTimer()"><i id="timer-icon" class="fa-solid fa-play"></i></button>
+                            <button class="timer-btn" onclick="resetTimer()"><i class="fa-solid fa-rotate-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NUTRITION CARD -->
+            <section id="nutrition-card" class="card hidden">
+                <div class="card-header">
+                    <i class="fa-solid fa-utensils"></i>
+                    <h2>Diet Strategy & Food Plan</h2>
                 </div>
 
-                <div id="exercise-list"></div>
+                <div class="nutrition-grid">
+                    <div class="nutri-box">
+                        <h4>Daily Target</h4>
+                        <p id="nutri-calories">-</p>
+                    </div>
+                    <div class="nutri-box">
+                        <h4>Macro Ratio</h4>
+                        <p id="nutri-macros">-</p>
+                    </div>
+                    <div class="nutri-box">
+                        <h4>Pre-Workout Fuel</h4>
+                        <p id="nutri-pre">-</p>
+                    </div>
+                    <div class="nutri-box">
+                        <h4>Post-Workout Recovery</h4>
+                        <p id="nutri-post">-</p>
+                    </div>
+                </div>
 
-                <div id="timer-widget" class="timer-widget hidden">
-                    <div>
-                        <p style="font-size:0.8rem; color:var(--text-muted);">Rest Timer</p>
-                        <div id="timer-display" class="timer-display">00:45</div>
-                    </div>
-                    <div style="display:flex; gap:8px;">
-                        <button class="timer-btn" onclick="toggleTimer()"><i id="timer-icon" class="fa-solid fa-play"></i></button>
-                        <button class="timer-btn" onclick="resetTimer()"><i class="fa-solid fa-rotate-right"></i></button>
-                    </div>
+                <div class="nutri-box" style="margin-top: 12px;">
+                    <h4>Recommended Foods</h4>
+                    <div id="food-tags" class="food-list"></div>
                 </div>
 
                 <p id="safety-disclaimer" class="disclaimer"></p>
-            </div>
-        </section>
+            </section>
+        </div>
 
-        <!-- AI CHAT ASSISTANT -->
+        <!-- RIGHT COLUMN: AI CHAT ASSISTANT -->
         <section class="card chat-container">
             <div class="card-header">
                 <i class="fa-solid fa-comments"></i>
@@ -523,7 +604,7 @@
         document.getElementById('workout-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('generate-btn');
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Engine Crafting Routine...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Engine Crafting Plan...`;
             btn.disabled = true;
 
             const payload = {
@@ -542,13 +623,14 @@
                 const result = await res.json();
                 if (result.success) {
                     renderWorkout(result.data);
+                    renderNutrition(result.data.nutrition, result.data.safety_disclaimer);
                 } else {
                     alert('Error generating routine: ' + result.error);
                 }
             } catch (err) {
                 alert('Network connection error.');
             } finally {
-                btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Generate Custom Plan`;
+                btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Generate Plan & Diet`;
                 btn.disabled = false;
             }
         });
@@ -579,8 +661,31 @@
                 listEl.appendChild(card);
             });
 
-            document.getElementById('safety-disclaimer').innerText = data.safety_disclaimer || '';
             document.getElementById('workout-output').classList.remove('hidden');
+        }
+
+        function renderNutrition(nutrition, disclaimer) {
+            if (!nutrition) return;
+
+            document.getElementById('nutri-calories').innerText = nutrition.daily_calories || 'N/A';
+            document.getElementById('nutri-macros').innerText = nutrition.macro_breakdown || 'N/A';
+            document.getElementById('nutri-pre').innerText = nutrition.pre_workout || 'N/A';
+            document.getElementById('nutri-post').innerText = nutrition.post_workout || 'N/A';
+
+            const foodContainer = document.getElementById('food-tags');
+            foodContainer.innerHTML = '';
+
+            if (nutrition.food_recommendations) {
+                nutrition.food_recommendations.forEach(item => {
+                    const tag = document.createElement('span');
+                    tag.className = 'food-tag';
+                    tag.innerText = item;
+                    foodContainer.appendChild(tag);
+                });
+            }
+
+            document.getElementById('safety-disclaimer').innerText = disclaimer || '';
+            document.getElementById('nutrition-card').classList.remove('hidden');
         }
 
         function startRestTimer(restString) {
