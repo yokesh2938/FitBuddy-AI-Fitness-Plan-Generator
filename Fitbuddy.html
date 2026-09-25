@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fit Buddy Pro — Elite Science & Fitness Dashboard</title>
+    <title>Fit Buddy Pro — Elite Fitness & Nutrition Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -13,7 +13,6 @@
             --card-border: rgba(255, 255, 255, 0.08);
             --primary: #00f2fe;
             --primary-gradient: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
-            --accent-gradient: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
         }
@@ -107,7 +106,6 @@
         }
         .btn-primary:hover { transform: translateY(-2px); }
 
-        /* Macro Dashboard */
         .macro-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 18px 0; }
         .macro-box {
             background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border);
@@ -116,7 +114,6 @@
         .macro-box span { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
         .macro-box p { font-size: 1.15rem; font-weight: 800; color: var(--primary); margin-top: 4px; }
 
-        /* Timeline and Checkbox List */
         .interactive-item {
             display: flex; align-items: flex-start; gap: 14px;
             background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border);
@@ -127,7 +124,7 @@
 
         .chat-container { display: flex; flex-direction: column; height: 480px; }
         .chat-box { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 6px; margin-bottom: 12px; }
-        .msg { max-width: 85%; padding: 12px 18px; border-radius: 16px; font-size: 0.9rem; line-height: 1.5; }
+        .msg { max-width: 85%; padding: 12px 18px; border-radius: 16px; font-size: 0.9rem; line-height: 1.5; white-space: pre-wrap; }
         .msg.user { align-self: flex-end; background: var(--primary-gradient); color: #fff; }
         .msg.bot { align-self: flex-start; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border); }
 
@@ -292,7 +289,7 @@
                     </button>
                 </form>
 
-                <div id="vision-output" class="hidden" style="margin-top:16px; padding:14px; background:rgba(0,198,255,0.06); border-radius:14px; font-size:0.88rem; line-height:1.5;"></div>
+                <div id="vision-output" class="hidden" style="margin-top:16px; padding:14px; background:rgba(0,198,255,0.06); border-radius:14px; font-size:0.88rem; line-height:1.5; white-space: pre-wrap;"></div>
             </section>
 
             <!-- CHAT ASSISTANT -->
@@ -316,10 +313,8 @@
     </main>
 
     <script>
-        const chatHistory = [];
-
-        // LOAD PERSISTED USER PROFILE ON INIT
-        window.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load saved user profile on application init
             try {
                 const res = await fetch('/api/profile');
                 const data = await res.json();
@@ -334,13 +329,21 @@
                     document.getElementById('tdee-val').innerText = p.tdee;
                 }
             } catch (e) {}
+
+            // Configure chat event handlers
+            const sendBtn = document.getElementById('send-btn');
+            const chatInput = document.getElementById('chat-input');
+            sendBtn.addEventListener('click', sendChat);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendChat();
+            });
         });
 
         // MASTER PLAN GENERATION
         document.getElementById('master-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('gen-btn');
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Calculating BMR/TDEE & Synthesizing Plan...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Calculating Engine & Generating Plan...`;
             btn.disabled = true;
 
             const payload = {
@@ -356,14 +359,12 @@
             };
 
             try {
-                // Save Profile First
                 await fetch('/api/profile', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
-                // Generate Plan
                 const res = await fetch('/api/generate-master-plan', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -376,10 +377,10 @@
                     document.getElementById('tdee-val').innerText = result.tdee;
                     renderMasterPlan(result.data);
                 } else {
-                    alert('Error: ' + result.error);
+                    alert('Error: ' + (result.error || 'Server error occurred.'));
                 }
             } catch (err) {
-                alert('Server connection error.');
+                alert('Connection Error. Ensure server is running on localhost:5000');
             } finally {
                 btn.innerHTML = `<i class="fa-solid fa-atom"></i> Generate Master Workout & Diet Blueprint`;
                 btn.disabled = false;
@@ -389,7 +390,6 @@
         function renderMasterPlan(d) {
             document.getElementById('plan-title-display').innerText = d.plan_title;
             
-            // Workout List
             const wList = document.getElementById('workout-list');
             wList.innerHTML = '';
             d.workout_protocol.forEach((ex, idx) => {
@@ -407,7 +407,6 @@
             });
             document.getElementById('workout-section').classList.remove('hidden');
 
-            // Nutrition
             document.getElementById('target-cal').innerText = d.target_daily_calories;
             document.getElementById('target-p').innerText = d.macro_targets.protein_grams;
             document.getElementById('target-c').innerText = d.macro_targets.carbs_grams;
@@ -442,14 +441,14 @@
             if (el) el.classList.toggle('completed');
         }
 
-        // MULTIMODAL VISION SCAN
+        // VISION SCAN SUBMIT
         document.getElementById('vision-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('vision-btn');
             const fileInput = document.getElementById('vision-file');
             if(!fileInput.files[0]) return;
 
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Processing Vision Model...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Processing Scan...`;
             btn.disabled = true;
 
             const formData = new FormData();
@@ -459,20 +458,22 @@
             try {
                 const res = await fetch('/api/analyze-multimodal', { method: 'POST', body: formData });
                 const result = await res.json();
+                const out = document.getElementById('vision-output');
                 if(result.success) {
-                    const out = document.getElementById('vision-output');
                     out.innerText = result.analysis;
-                    out.classList.remove('hidden');
+                } else {
+                    out.innerText = "⚠️ Error: " + (result.error || "Vision analysis failed.");
                 }
-            } catch(err) { alert('Image scan failed.'); }
-            finally {
+                out.classList.remove('hidden');
+            } catch(err) { 
+                alert('Image scan failed.'); 
+            } finally {
                 btn.innerHTML = `<i class="fa-solid fa-camera"></i> Execute Vision Scan`;
                 btn.disabled = false;
             }
         });
 
         // CHAT ASSISTANT
-        document.getElementById('send-btn').addEventListener('click', sendChat);
         async function sendChat() {
             const input = document.getElementById('chat-input');
             const msg = input.value.trim();
@@ -485,15 +486,17 @@
                 const res = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: msg, history: chatHistory })
+                    body: JSON.stringify({ message: msg })
                 });
                 const result = await res.json();
                 if(result.success) {
                     appendMsg('bot', result.reply);
-                    chatHistory.push({ sender: 'user', text: msg });
-                    chatHistory.push({ sender: 'bot', text: result.reply });
+                } else {
+                    appendMsg('bot', '⚠️ Error: ' + (result.error || 'Server error.'));
                 }
-            } catch(err) {}
+            } catch(err) {
+                appendMsg('bot', '⚠️ Connection error. Ensure server is running.');
+            }
         }
 
         function appendMsg(sender, text) {
